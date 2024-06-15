@@ -11,7 +11,6 @@ class WeatherTransformer(nn.Module):
         self.decoder = nn.Linear(num_features, 1)
     
     def forward(self, src):
-        # src shape: (batch_size, sequence_length, num_features)
         src = src.permute(1, 0, 2)  # transformer expects (sequence_length, batch_size, num_features)
         output = self.transformer_encoder(src)
         output = self.decoder(output[-1])  # Use the output of the last time step
@@ -19,7 +18,7 @@ class WeatherTransformer(nn.Module):
 
 # Ustawienia modelu
 num_features = 10  # Liczba cech w danych wejściowych
-num_heads = 2  # Liczba głów uwagi
+num_heads = 4  # Liczba głów uwagi
 num_layers = 12  # Liczba warstw enkodera
 dropout = 0.1  # Współczynnik dropoutu
 
@@ -34,7 +33,7 @@ y_train = np.random.rand(1000, 1).astype(np.float32)  # 1000 etykiet
 
 # Konwersja do tensora
 train_data = TensorDataset(torch.from_numpy(X_train), torch.from_numpy(y_train))
-train_loader = DataLoader(train_data, batch_size=32, shuffle=True)
+train_loader = DataLoader(train_data, batch_size=64, shuffle=True)
 
 criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
@@ -52,3 +51,5 @@ for epoch in range(num_epochs):
         optimizer.step()
         running_loss += loss.item()
     print(f'Epoch {epoch+1}/{num_epochs}, Loss: {running_loss/len(train_loader)}')
+
+
