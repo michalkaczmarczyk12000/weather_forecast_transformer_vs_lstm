@@ -34,15 +34,14 @@ class FeedForwardBlock(nn.Module):
         return self.linear_2(self.dropout(torch.relu(self.linear_1(x))))
 
 
-class InputEmbeddings(nn.Module):
+class InputProjection(nn.Module):
 
-    def __init__(self, d_model: int, vocab_size: int) -> None:
+    def __init__(self, input_dim: int, d_model: int) -> None:
         super().__init__()
-        self.d_model = d_model
-        self.embedding = nn.Embedding(vocab_size, d_model)
+        self.linear = nn.Linear(input_dim, d_model)
 
     def forward(self, x):
-        return self.embedding(x) * math.sqrt(self.d_model)
+        return self.linear(x) * math.sqrt(self.linear.out_features)
 
 
 class PositionalEncoding(nn.Module):
@@ -217,8 +216,8 @@ class Transformer(nn.Module):
         self,
         encoder: Encoder,
         decoder: Decoder,
-        src_embed: InputEmbeddings,
-        tgt_embed: InputEmbeddings,
+        src_proj: InputProjection,
+        tgt_proj: InputProjection,
         src_pos: PositionalEncoding,
         tgt_pos: PositionalEncoding,
         projection_layer: ProjectionLayer,
@@ -226,14 +225,14 @@ class Transformer(nn.Module):
         super().__init__()
         self.encoder = encoder
         self.decoder = decoder
-        self.src_embed = src_embed
-        self.tgt_embed = tgt_embed
+        self.src_proj = src_proj
+        self.tgt_proj = tgt_proj
         self.src_pos = src_pos
         self.tgt_pos = tgt_pos
         self.projection_layer = projection_layer
 
     def encode(self, src, src_mask):
-        src = self.src_embed(src)
+        src = self.src_proj(src)
         src = self.src_pos(src)
         return self.encoder(src, src_mask)
 
@@ -244,11 +243,11 @@ class Transformer(nn.Module):
         tgt: torch.Tensor,
         tgt_mask: torch.Tensor,
     ):
-        tgt = self.tgt_embed(tgt)
+        tgt = self.tgt_proj(tgt)
         tgt = self.tgt_pos(tgt)
         return self.decoder(tgt, encoder_output, src_mask, tgt_mask)
 
-    def project(self, x):
+    def project(self, x) -> None:
         return self.projection_layer(x)
 
 
@@ -263,8 +262,8 @@ def build_transformer(
     dropout: float = 0.1,
     d_ff: int = 2048,
 ) -> Transformer:
-    src_embed = InputEmbeddings(d_model, src_vocab_size)
-    tgt_embed = InputEmbeddings(d_model, tgt_vocab_size)
+    src_proj = InputProjection(src_vocab_size, d_model)
+    tgt_proj = InputProjection(tgt_vocab_size, d_model)
     src_pos = PositionalEncoding(d_model, src_seq_len, dropout)
     tgt_pos = PositionalEncoding(d_model, tgt_seq_len, dropout)
     encoder_blocks = []
@@ -292,13 +291,30 @@ def build_transformer(
     decoder = Decoder(d_model, nn.ModuleList(decoder_blocks))
     projection_layer = ProjectionLayer(d_model, tgt_vocab_size)
     model = Transformer(
-        encoder, decoder, src_embed, tgt_embed, src_pos, tgt_pos, projection_layer
+        encoder, decoder, src_proj, tgt_proj, src_pos, tgt_pos, projection_layer
     )
     return model
 
 
 # Prepare your data
 data = pd.read_csv("weatherHistory.csv")
+
+# Convert the date column to datetime with utc=True
+data["Formatted Date"] = pd.to_datetime(data["Formatted Date"], utc=True)
+
+# Extract date and time features
+data["year"] = data["Formatted Date"].dt.year
+data["month"] = data["Formatted Date"].dt.month
+data["day"] = data["Formatted Date"].dt.day
+data["hour"] = data["Formatted Date"].dt.hour
+data["minute"] = data["Formatted Date"].dt.minute
+data["second"] = data["Formatted Date"].dt.second
+data["day_of_week"] = data["Formatted Date"].dt.dayofweek
+
+# Remove the original date column and non-numeric columns
+data = data.drop(columns=["Formatted Date", "Summary", "Precip Type", "Daily Summary"])
+
+# Normalize the data
 scaler = StandardScaler()
 normalized_data = scaler.fit_transform(data.values)
 
@@ -357,14 +373,18 @@ optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 
 def create_mask(src, tgt):
-    src_mask = torch.ones((src.size(0), 1, src.size(1))).to(src.device)
-    tgt_mask = torch.tril(torch.ones((tgt.size(0), tgt.size(1), tgt.size(1)))).to(
+    batch_size, src_seq_len = src.shape[0], src.shape[1]
+    _, tgt_seq_len = tgt.shape[0], tgt.shape[1]
+
+    src_mask = torch.ones((batch_size, 1, src_seq_len)).to(src.device)
+    tgt_mask = torch.tril(torch.ones((batch_size, tgt_seq_len, tgt_seq_len))).to(
         tgt.device
     )
+
     return src_mask, tgt_mask
 
 
-# Train the model
+# Define the model training loop with corrected mask sizes
 num_epochs = 10
 
 model.train()
