@@ -298,7 +298,7 @@ def build_transformer(
 
 
 # Prepare your data
-data = pd.read_csv("weather_data.csv")
+data = pd.read_csv("weatherHistory.csv")
 scaler = StandardScaler()
 normalized_data = scaler.fit_transform(data.values)
 
