@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 # Wczytaj dane z pliku CSV
 file_path = 'Data\weatherHistory.csv'
 df = pd.read_csv(file_path)
+df.sort_values(by='Formatted Date', inplace = True)
 
 # Załóżmy, że mamy DataFrame df
 train_size = int(0.8 * len(df))  # 80% na trening
