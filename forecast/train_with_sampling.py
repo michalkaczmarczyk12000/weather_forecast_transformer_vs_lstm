@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 def flip_from_probability(p):
     return True if random.random() < p else False
 
-def transformer(dataloader, EPOCH, k, frequency, path_to_save_model, path_to_save_loss, path_to_save_predictions, device):
+def transformer(dataloader, EPOCH, k, frequency, path_to_save_model, path_to_save_loss, path_to_save_predictions, device='cpu'):
 
     device = torch.device(device)
 
