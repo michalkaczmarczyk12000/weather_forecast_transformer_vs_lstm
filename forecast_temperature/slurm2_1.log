@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/net/tscratch/people/plgmaciejstranz/zzsn/forecast_temperature/main.py", line 78, in <module>
+    main(
+  File "/net/tscratch/people/plgmaciejstranz/zzsn/forecast_temperature/main.py", line 27, in main
+    clean_directory()
+  File "/net/tscratch/people/plgmaciejstranz/zzsn/forecast_temperature/helpers.py", line 27, in clean_directory
+    shutil.rmtree('save_loss')
+  File "/net/tscratch/people/plgmaciejstranz/cache/test-env/lib/python3.10/shutil.py", line 731, in rmtree
+    onerror(os.rmdir, path, sys.exc_info())
+  File "/net/tscratch/people/plgmaciejstranz/cache/test-env/lib/python3.10/shutil.py", line 729, in rmtree
+    os.rmdir(path)
+FileNotFoundError: [Errno 2] No such file or directory: 'save_loss'
+srun: error: t0047: task 0: Exited with exit code 1
+[2024-06-16 20:24:51] [INFO] train_teacher_forcing Epoch: 0, Training loss: 41.87753750008253
+slurmstepd: error: *** STEP 769394.0 ON t0046 CANCELLED AT 2024-06-16T20:24:57 ***
+slurmstepd: error: *** JOB 769394 ON t0046 CANCELLED AT 2024-06-16T20:24:57 ***

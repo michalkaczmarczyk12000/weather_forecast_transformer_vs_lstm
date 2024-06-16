@@ -1,0 +1,7 @@
+srun: Job step aborted: Waiting up to 182 seconds for job step to finish.
+slurmstepd: error: *** STEP 769395.0 ON t0024 CANCELLED AT 2024-06-16T20:24:57 ***
+slurmstepd: error: *** JOB 769395 ON t0024 CANCELLED AT 2024-06-16T20:24:57 ***
+[2024-06-16 20:25:04] [INFO] train_teacher_forcing Epoch: 0, Training loss: 40.911369666322116
+srun: Job step aborted: Waiting up to 182 seconds for job step to finish.
+slurmstepd: error: *** STEP 769397.0 ON t0047 CANCELLED AT 2024-06-16T20:25:07 ***
+slurmstepd: error: *** JOB 769397 ON t0047 CANCELLED AT 2024-06-16T20:25:07 ***
