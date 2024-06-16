@@ -376,17 +376,19 @@ def create_mask(src, tgt):
     batch_size, src_seq_len = src.shape[0], src.shape[1]
     _, tgt_seq_len = tgt.shape[0], tgt.shape[1]
 
-    src_mask = torch.ones((batch_size, 1, src_seq_len)).to(src.device)
-    tgt_mask = torch.tril(torch.ones((batch_size, tgt_seq_len, tgt_seq_len))).to(
+    # Source mask: [batch_size, 1, src_seq_len, src_seq_len]
+    src_mask = torch.ones((batch_size, 1, src_seq_len, src_seq_len)).to(src.device)
+
+    # Target mask: [batch_size, 1, tgt_seq_len, tgt_seq_len]
+    tgt_mask = torch.tril(torch.ones((batch_size, 1, tgt_seq_len, tgt_seq_len))).to(
         tgt.device
     )
 
     return src_mask, tgt_mask
 
 
-# Define the model training loop with corrected mask sizes
+# Training loop (unchanged except for mask creation)
 num_epochs = 10
-
 model.train()
 for epoch in range(num_epochs):
     total_loss = 0
