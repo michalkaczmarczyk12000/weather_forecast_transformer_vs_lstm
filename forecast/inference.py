@@ -38,7 +38,7 @@ def inference(path_to_save_predictions, forecast_window, dataloader, device, pat
 
                 for i in range(forecast_window - 1):
                     
-                    prediction = model(next_input_model, device) # 47,1,1: t2' - t48'
+                    prediction = model(next_input_model) # 47,1,1: t2' - t48'
 
                     if all_predictions == []:
                         all_predictions = prediction # 47,1,1: t2' - t48'

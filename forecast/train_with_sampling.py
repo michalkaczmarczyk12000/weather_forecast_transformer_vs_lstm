@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 from DataLoader import SensorDataset
 import logging
-import time  # debugging
+import time
 from plot import *
 from helpers import *
 from joblib import load
@@ -52,7 +52,7 @@ def transformer(
             sampled_src = src[:1, :, :]
 
             for i in range(len(target) - 1):
-                prediction = model(sampled_src)  # Remove 'device' from this call
+                prediction = model(sampled_src)
 
                 if i < 24:
                     prob_true_val = True

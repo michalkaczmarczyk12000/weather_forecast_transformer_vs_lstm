@@ -1,6 +1,6 @@
 import argparse
-
-from train_with_sampling import *
+from train_teacher_forcing import *
+# from train_with_sampling import *
 from DataLoader import *
 from torch.utils.data import DataLoader
 import torch.nn as nn
@@ -63,7 +63,7 @@ def main(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--epoch", type=int, default=1000)
+    parser.add_argument("--epoch", type=int, default=200)
     parser.add_argument("--k", type=int, default=60)
     parser.add_argument("--batch_size", type=int, default=1)
     parser.add_argument("--frequency", type=int, default=100)
