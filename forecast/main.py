@@ -16,8 +16,8 @@ def main(
     frequency: int = 100,
     training_length=48,
     forecast_window=24,
-    train_csv="train_dataset.csv",
-    test_csv="test_dataset.csv",
+    train_csv="weather_train.csv",
+    test_csv="weather_test.csv",
     path_to_save_model="save_model/",
     path_to_save_loss="save_loss/",
     path_to_save_predictions="save_predictions/",
@@ -26,14 +26,14 @@ def main(
 
     clean_directory()
 
-    train_dataset = SensorDataset(
+    train_dataset = WeatherDataset(
         csv_name=train_csv,
         root_dir="Data/",
         training_length=training_length,
         forecast_window=forecast_window,
     )
     train_dataloader = DataLoader(train_dataset, batch_size=1, shuffle=True)
-    test_dataset = SensorDataset(
+    test_dataset = WeatherDataset(
         csv_name=test_csv,
         root_dir="Data/",
         training_length=training_length,

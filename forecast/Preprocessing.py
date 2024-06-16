@@ -9,7 +9,7 @@ def process_data(source):
 
     df = pd.read_csv(source)
         
-    timestamps = [ts.split('+')[0] for ts in  df['timestamp']]
+    timestamps = [ts.split('.')[0] for ts in  df['Formatted Date']]
     timestamps_hour = np.array([float(datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S').hour) for t in timestamps])
     timestamps_day = np.array([float(datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S').day) for t in timestamps])
     timestamps_month = np.array([float(datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S').month) for t in timestamps])
@@ -27,8 +27,8 @@ def process_data(source):
 
     return df
 
-train_dataset = process_data('Data/train_raw.csv')
-test_dataset = process_data('Data/test_raw.csv')
+train_dataset = process_data('Data/weather_train_raw.csv')
+test_dataset = process_data('Data/weather_test_raw.csv')
 
-train_dataset.to_csv(r'Data/train_dataset.csv', index=False)
-test_dataset.to_csv(r'Data/test_dataset.csv', index=False)
+train_dataset.to_csv(r'Data/weather_train.csv', index=False)
+test_dataset.to_csv(r'Data/weather_test.csv', index=False)
