@@ -10,7 +10,7 @@ from inference import *
 
 
 def main(
-    epoch: int = 1000,
+    epoch: int = 50,
     k: int = 60,
     batch_size: int = 1,
     frequency: int = 100,

@@ -83,18 +83,17 @@ class Transformer(nn.Module):
         )
         return mask
 
-    def forward(self, src, tgt):
+    def forward(self, src):
         src = src.to(self.device)
-        tgt = tgt.to(self.device)
 
         src_mask = self._generate_square_subsequent_mask(src.size(0)).to(self.device)
-        tgt_mask = self._generate_square_subsequent_mask(tgt.size(0)).to(self.device)
+        tgt_mask = self._generate_square_subsequent_mask(src.size(0)).to(self.device)
 
         memory = src
         for layer in self.encoder_layers:
             memory = layer(memory)
 
-        output = tgt
+        output = memory
         for layer in self.decoder_layers:
             output = layer(output, memory)
 
