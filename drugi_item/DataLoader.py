@@ -11,7 +11,7 @@ from icecream import ic
 
 
 class WeatherDataset(Dataset):
-    """Face Landmarks dataset."""
+    """Weather dataset."""
 
     def __init__(self, csv_name, root_dir, training_length, forecast_window):
         """
@@ -29,16 +29,12 @@ class WeatherDataset(Dataset):
         self.S = forecast_window
 
     def __len__(self):
-            # return the number of unique timestamps divided by the training length plus forecast window
-            return len(self.df) // (self.T + self.S)
+        # return the number of unique timestamps divided by the training length plus forecast window
+        return len(self.df) // (self.T + self.S)
 
     # Will pull an index between 0 and __len__.
     def __getitem__(self, idx):
-
         start = np.random.randint(0, len(self.df) - self.T - self.S)
-
-        # np.random.seed(0)
-
         index_in = torch.tensor([i for i in range(start, start + self.T)])
         index_tar = torch.tensor([i for i in range(start + self.T, start + self.T + self.S)])
 
@@ -63,8 +59,8 @@ class WeatherDataset(Dataset):
         target = torch.tensor(
             self.df[
                 [
-                    "Humidity",
                     "Temperature (C)",
+                    "Humidity",
                     "sin_hour",
                     "cos_hour",
                     "sin_day",
@@ -76,10 +72,8 @@ class WeatherDataset(Dataset):
         )
 
         # scalar is fit only to the input, to avoid the scaled values "leaking" information about the target range.
-        # scalar is fit only for humidity, as the timestamps are already scaled
-        # scalar input/output of shape: [n_samples, n_features].
+        # scalar is fit only for temperature, as the timestamps are already scaled
         scaler = self.transform
-
         scaler.fit(_input[:, 0].unsqueeze(-1))
         _input[:, 0] = torch.tensor(
             scaler.transform(_input[:, 0].unsqueeze(-1)).squeeze(-1)
