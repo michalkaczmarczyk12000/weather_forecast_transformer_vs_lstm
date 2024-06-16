@@ -81,7 +81,7 @@ def transformer(
             min_train_loss = train_loss
             best_model = f"best_train_{epoch}.pth"
 
-        if epoch % 100 == 0:  # Plot 1-Step Predictions
+        if epoch % 1 == 0:  # Plot 1-Step Predictions
 
             logger.info(f"Epoch: {epoch}, Training loss: {train_loss}")
             scaler = load("scalar_item.joblib")

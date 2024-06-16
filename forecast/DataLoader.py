@@ -45,12 +45,7 @@ class WeatherDataset(Dataset):
         _input = torch.tensor(
             self.df[
                 [
-		    "Humidity",
-                    "Temperature (C)",
-                    "Apparent Temperature (C)",
-                    "Wind Speed (km/h)",
-                    "Wind Bearing (degrees)",
-                    "Visibility (km)",
+		            "Humidity",
                     "sin_hour",
                     "cos_hour",
                     "sin_day",
@@ -64,7 +59,6 @@ class WeatherDataset(Dataset):
             self.df[
                 [
                     "Humidity",
-                    "Temperature (C)",
                     "sin_hour",
                     "cos_hour",
                     "sin_day",

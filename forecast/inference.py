@@ -27,7 +27,7 @@ def inference(path_to_save_predictions, forecast_window, dataloader, device, pat
         model.eval()
         for plot in range(25):
 
-            for index_in, index_tar, _input, target, sensor_number in dataloader:
+            for index_in, index_tar, _input, target in dataloader:
                 
                 # starting from 1 so that src matches with target, but has same length as when training
                 src = _input.permute(1,0,2).double().to(device)[1:, :, :] # 47, 1, 7: t1 -- t47
@@ -61,6 +61,6 @@ def inference(path_to_save_predictions, forecast_window, dataloader, device, pat
             src_humidity = scaler.inverse_transform(src[:,:,0].cpu())
             target_humidity = scaler.inverse_transform(target[:,:,0].cpu())
             prediction_humidity = scaler.inverse_transform(all_predictions[:,:,0].detach().cpu().numpy())
-            plot_prediction(plot, path_to_save_predictions, src_humidity, target_humidity, prediction_humidity, sensor_number, index_in, index_tar)
+            plot_prediction(plot, path_to_save_predictions, src_humidity, target_humidity, prediction_humidity, index_in, index_tar)
 
         logger.info(f"Loss On Unseen Dataset: {val_loss.item()}")
