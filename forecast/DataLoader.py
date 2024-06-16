@@ -1,6 +1,6 @@
 import pandas as pd
 from torch.utils.data import Dataset, DataLoader
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 import os
 import torch
 import numpy as np
@@ -24,7 +24,7 @@ class WeatherDataset(Dataset):
         csv_file = os.path.join(root_dir, csv_name)
         self.df = pd.read_csv(csv_file)
         self.root_dir = root_dir
-        self.transform = MinMaxScaler()
+        self.transform = StandardScaler()
         self.T = training_length
         self.S = forecast_window
 
