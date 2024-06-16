@@ -1,1 +1,20 @@
-[2024-06-16 19:47:32] [INFO] train_teacher_forcing Epoch: 0, Training loss: 68.66869622028761
+[2024-06-16 20:02:29] [INFO] train_teacher_forcing Epoch: 0, Training loss: 67.60847913857896
+Traceback (most recent call last):
+  File "/net/tscratch/people/plgmaciejstranz/zzsn/drugi_item/main.py", line 78, in <module>
+    main(
+  File "/net/tscratch/people/plgmaciejstranz/zzsn/drugi_item/main.py", line 44, in main
+    best_model = transformer(
+  File "/net/tscratch/people/plgmaciejstranz/zzsn/drugi_item/train_teacher_forcing.py", line 94, in transformer
+    plot_training(
+  File "/net/tscratch/people/plgmaciejstranz/zzsn/drugi_item/plot.py", line 63, in plot_training
+    plt.plot(index_in, src, label="Input Temperature")
+  File "/net/tscratch/people/plgmaciejstranz/cache/test-env/lib/python3.10/site-packages/matplotlib/pyplot.py", line 3708, in plot
+    return gca().plot(
+  File "/net/tscratch/people/plgmaciejstranz/cache/test-env/lib/python3.10/site-packages/matplotlib/axes/_axes.py", line 1779, in plot
+    lines = [*self._get_lines(self, *args, data=data, **kwargs)]
+  File "/net/tscratch/people/plgmaciejstranz/cache/test-env/lib/python3.10/site-packages/matplotlib/axes/_base.py", line 296, in __call__
+    yield from self._plot_args(
+  File "/net/tscratch/people/plgmaciejstranz/cache/test-env/lib/python3.10/site-packages/matplotlib/axes/_base.py", line 486, in _plot_args
+    raise ValueError(f"x and y must have same first dimension, but "
+ValueError: x and y must have same first dimension, but have shapes (1, 48) and (47, 1)
+srun: error: t0024: task 0: Exited with exit code 1
