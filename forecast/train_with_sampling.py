@@ -45,7 +45,7 @@ def transformer(
         train_loss = 0
         model.train()
 
-        for index_in, index_tar, _input, target, sensor_number in dataloader:
+        for index_in, index_tar, _input, target in dataloader:
             optimizer.zero_grad()
             src = _input.permute(1, 0, 2).double().to(device)[:-1, :, :]
             target = _input.permute(1, 0, 2).double().to(device)[1:, :, :]
@@ -107,7 +107,6 @@ def transformer(
                 src_humidity,
                 sampled_src_humidity,
                 prediction_humidity,
-                sensor_number,
                 index_in,
                 index_tar,
             )
