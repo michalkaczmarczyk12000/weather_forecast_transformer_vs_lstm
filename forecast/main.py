@@ -1,6 +1,6 @@
 import argparse
 
-from train_with_sampling import *
+from train_teacher_forcing import *
 from DataLoader import *
 from torch.utils.data import DataLoader
 import torch.nn as nn
@@ -21,7 +21,7 @@ def main(
     path_to_save_model="save_model/",
     path_to_save_loss="save_loss/",
     path_to_save_predictions="save_predictions/",
-    device="cpu",
+    device="cuda",
 ):
 
     clean_directory()
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--path_to_save_predictions", type=str, default="save_predictions/"
     )
-    parser.add_argument("--device", type=str, default="cpu")
+    parser.add_argument("--device", type=str, default="cuda")
     args = parser.parse_args()
 
     main(

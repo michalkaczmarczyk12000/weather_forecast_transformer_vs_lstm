@@ -22,7 +22,7 @@ def plot_loss(path_to_save, train=True):
     plt.savefig(path_to_save+f"/{title}.png")
     plt.close()
 
-def plot_prediction(title, path_to_save, src, tgt, prediction, sensor_number, index_in, index_tar):
+def plot_prediction(title, path_to_save, src, tgt, prediction,  index_in, index_tar):
 
     idx_scr = index_in[0, 1:].tolist()
     idx_tgt = index_tar[0].tolist()
@@ -47,13 +47,13 @@ def plot_prediction(title, path_to_save, src, tgt, prediction, sensor_number, in
     plt.xlabel("Time Elapsed")
     plt.ylabel("Humidity (%)")
     plt.legend()
-    plt.title("Forecast from Sensor " + str(sensor_number[0]))
+    plt.title("Forecast")
 
     # save
     plt.savefig(path_to_save+f"Prediction_{title}.png")
     plt.close()
 
-def plot_training(epoch, path_to_save, src, prediction, sensor_number, index_in, index_tar):
+def plot_training(epoch, path_to_save, src, prediction, index_in, index_tar):
 
     # idx_scr = index_in.tolist()[0]
     # idx_tar = index_tar.tolist()[0]
@@ -71,14 +71,14 @@ def plot_training(epoch, path_to_save, src, prediction, sensor_number, index_in,
     plt.plot(idx_scr, src, 'o-.', color = 'blue', label = 'input sequence', linewidth=1)
     plt.plot(idx_pred, prediction, 'o-.', color = 'limegreen', label = 'prediction sequence', linewidth=1)
 
-    plt.title("Teaching Forcing from Sensor " + str(sensor_number[0]) + ", Epoch " + str(epoch))
+    plt.title("Teaching Forcing from S Epoch " + str(epoch))
     plt.xlabel("Time Elapsed")
     plt.ylabel("Humidity (%)")
     plt.legend()
     plt.savefig(path_to_save+f"/Epoch_{str(epoch)}.png")
     plt.close()
 
-def plot_training_3(epoch, path_to_save, src, sampled_src, prediction, sensor_number, index_in, index_tar):
+def plot_training_3(epoch, path_to_save, src, sampled_src, prediction,  index_in, index_tar):
 
     # idx_scr = index_in.tolist()[0]
     # idx_tar = index_tar.tolist()[0]
@@ -98,7 +98,7 @@ def plot_training_3(epoch, path_to_save, src, sampled_src, prediction, sensor_nu
     plt.plot(idx_sampled_src, sampled_src, 'o-.', color='red', label = 'sampled source', linewidth=1, markersize=10)
     plt.plot(idx_scr, src, 'o-.', color = 'blue', label = 'input sequence', linewidth=1)
     plt.plot(idx_pred, prediction, 'o-.', color = 'limegreen', label = 'prediction sequence', linewidth=1)
-    plt.title("Teaching Forcing from Sensor " + str(sensor_number[0]) + ", Epoch " + str(epoch))
+    plt.title("Teaching Forcing from  , Epoch " + str(epoch))
     plt.xlabel("Time Elapsed")
     plt.ylabel("Humidity (%)")
     plt.legend()

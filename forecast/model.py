@@ -55,7 +55,7 @@ class DecoderLayer(nn.Module):
 
 class Transformer(nn.Module):
     def __init__(
-        self, feature_size=7, num_layers=3, nhead=7, dropout=0.1, device="cpu"
+        self, feature_size=12, num_layers=3, nhead=6, dropout=0.1, device="cuda"
     ):
         super(Transformer, self).__init__()
         self.device = device
