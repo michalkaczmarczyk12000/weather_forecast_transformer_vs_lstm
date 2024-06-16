@@ -21,7 +21,7 @@ def main(
     path_to_save_model="save_model/",
     path_to_save_loss="save_loss/",
     path_to_save_predictions="save_predictions/",
-    device="cuda",
+    device="cpu",
 ):
 
     clean_directory()
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--path_to_save_predictions", type=str, default="save_predictions/"
     )
-    parser.add_argument("--device", type=str, default="cuda")
+    parser.add_argument("--device", type=str, default="cpu")
     args = parser.parse_args()
 
     main(
