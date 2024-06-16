@@ -58,35 +58,12 @@ def plot_prediction(title, path_to_save, src, tgt, prediction, index_in, index_t
     plt.close()
 
 
-def plot_training(epoch, path_to_save, src, prediction, index_in, index_tar):
-
-    # idx_scr = index_in.tolist()[0]
-    # idx_tar = index_tar.tolist()[0]
-    # idx_pred = idx_scr.append(idx_tar.append([idx_tar[-1] + 1]))
-
-    idx_scr = [i for i in range(len(src))]
-    idx_pred = [i for i in range(1, len(prediction) + 1)]
-
-    plt.figure(figsize=(15, 6))
-    plt.rcParams.update({"font.size": 18})
-    plt.grid(visible=True, which="major", linestyle="-")
-    plt.grid(visible=True, which="minor", linestyle="--", alpha=0.5)
-    plt.minorticks_on()
-
-    plt.plot(idx_scr, src, "o-.", color="blue", label="input sequence", linewidth=1)
-    plt.plot(
-        idx_pred,
-        prediction,
-        "o-.",
-        color="limegreen",
-        label="prediction sequence",
-        linewidth=1,
-    )
-
-    plt.title("Teaching Forcing  " + " Epoch " + str(epoch))
-    plt.xlabel("Time Elapsed")
-    plt.ylabel("Humidity (%)")
+def plot_training(epoch, path_to_save_predictions, src, prediction, index_in, index_tar):
+    plt.figure(figsize=(10, 5))
+    plt.plot(index_in, src, label="Input Temperature")
+    plt.plot(index_tar, prediction, label="Predicted Temperature")
     plt.legend()
+    plt.title(f"Epoch {epoch}: Input and Predicted Temperature")
     plt.savefig(path_to_save + f"/Epoch_{str(epoch)}.png")
     plt.close()
 
