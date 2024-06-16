@@ -34,7 +34,6 @@ def transformer(
 
     model = Transformer().double().to(device)
     optimizer = torch.optim.Adam(model.parameters())
-    # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=200)
     criterion = torch.nn.MSELoss()
     best_model = ""
     min_train_loss = float("inf")
@@ -42,7 +41,6 @@ def transformer(
     for epoch in range(EPOCH + 1):
 
         train_loss = 0
-        val_loss = 0
 
         ## TRAIN -- TEACHER FORCING
         model.train()
@@ -68,7 +66,6 @@ def transformer(
             loss = criterion(prediction, target[:, :, 0].unsqueeze(-1))
             loss.backward()
             optimizer.step()
-            # scheduler.step(loss.detach().item())
             train_loss += loss.detach().item()
 
         if train_loss < min_train_loss:
@@ -85,20 +82,20 @@ def transformer(
 
             logger.info(f"Epoch: {epoch}, Training loss: {train_loss}")
             scaler = load("scalar_item.joblib")
-            src_humidity = scaler.inverse_transform(
+            src_temp = scaler.inverse_transform(
                 src[:, :, 0].cpu()
             )  # torch.Size([35, 1, 7])
-            target_humidity = scaler.inverse_transform(
+            target_temp = scaler.inverse_transform(
                 target[:, :, 0].cpu()
             )  # torch.Size([35, 1, 7])
-            prediction_humidity = scaler.inverse_transform(
+            prediction_temp = scaler.inverse_transform(
                 prediction[:, :, 0].detach().cpu().numpy()
             )  # torch.Size([35, 1, 7])
             plot_training(
                 epoch,
                 path_to_save_predictions,
-                src_humidity,
-                prediction_humidity,
+                src_temp,
+                prediction_temp,
                 index_in,
                 index_tar,
             )
