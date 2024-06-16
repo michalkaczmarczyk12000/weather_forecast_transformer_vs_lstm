@@ -10,7 +10,7 @@ from joblib import dump
 from icecream import ic
 
 
-class SensorDataset(Dataset):
+class WeatherDataset(Dataset):
     """Face Landmarks dataset."""
 
     def __init__(self, csv_name, root_dir, training_length, forecast_window):
@@ -29,33 +29,28 @@ class SensorDataset(Dataset):
         self.S = forecast_window
 
     def __len__(self):
-        # return number of sensors
-        return len(self.df.groupby(by=["reindexed_id"]))
+            # return the number of unique timestamps divided by the training length plus forecast window
+            return len(self.df) // (self.T + self.S)
 
     # Will pull an index between 0 and __len__.
     def __getitem__(self, idx):
 
-        # Sensors are indexed from 1
-        idx = idx + 1
+        start = np.random.randint(0, len(self.df) - self.T - self.S)
 
         # np.random.seed(0)
 
-        start = np.random.randint(
-            0, len(self.df[self.df["reindexed_id"] == idx]) - self.T - self.S
-        )
-        sensor_number = str(
-            self.df[self.df["reindexed_id"] == idx][["sensor_id"]][
-                start : start + 1
-            ].values.item()
-        )
         index_in = torch.tensor([i for i in range(start, start + self.T)])
-        index_tar = torch.tensor(
-            [i for i in range(start + self.T, start + self.T + self.S)]
-        )
+        index_tar = torch.tensor([i for i in range(start + self.T, start + self.T + self.S)])
+
         _input = torch.tensor(
-            self.df[self.df["reindexed_id"] == idx][
+            self.df[
                 [
-                    "humidity",
+                    "Temperature (C)",
+                    "Apparent Temperature (C)",
+                    "Humidity",
+                    "Wind Speed (km/h)",
+                    "Wind Bearing (degrees)",
+                    "Visibility (km)",
                     "sin_hour",
                     "cos_hour",
                     "sin_day",
@@ -66,9 +61,10 @@ class SensorDataset(Dataset):
             ][start : start + self.T].values
         )
         target = torch.tensor(
-            self.df[self.df["reindexed_id"] == idx][
+            self.df[
                 [
-                    "humidity",
+                    "Humidity",
+                    "Temperature (C)",
                     "sin_hour",
                     "cos_hour",
                     "sin_day",
@@ -95,4 +91,4 @@ class SensorDataset(Dataset):
         # save the scalar to be used later when inverse translating the data for plotting.
         dump(scaler, "scalar_item.joblib")
 
-        return index_in, index_tar, _input, target, sensor_number
+        return index_in, index_tar, _input, target

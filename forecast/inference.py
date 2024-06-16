@@ -2,7 +2,7 @@ from model import Transformer
 from torch.utils.data import DataLoader
 import torch
 import torch.nn as nn
-from DataLoader import SensorDataset
+from DataLoader import WeatherDataset
 import logging
 import time # debugging
 from plot import *
