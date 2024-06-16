@@ -46,6 +46,7 @@ class WeatherDataset(Dataset):
             self.df[
                 [
 		            "Humidity",
+                    "Temperature (C)",
                     "sin_hour",
                     "cos_hour",
                     "sin_day",
@@ -59,6 +60,7 @@ class WeatherDataset(Dataset):
             self.df[
                 [
                     "Humidity",
+                    "Temperature (C)",
                     "sin_hour",
                     "cos_hour",
                     "sin_day",
@@ -74,12 +76,12 @@ class WeatherDataset(Dataset):
         # scalar input/output of shape: [n_samples, n_features].
         scaler = self.transform
 
-        scaler.fit(_input[:, 0].unsqueeze(-1))
-        _input[:, 0] = torch.tensor(
-            scaler.transform(_input[:, 0].unsqueeze(-1)).squeeze(-1)
+        scaler.fit(_input[:, 1].unsqueeze(-1))
+        _input[:, 1] = torch.tensor(
+            scaler.transform(_input[:, 1].unsqueeze(-1)).squeeze(-1)
         )
-        target[:, 0] = torch.tensor(
-            scaler.transform(target[:, 0].unsqueeze(-1)).squeeze(-1)
+        target[:, 1] = torch.tensor(
+            scaler.transform(target[:, 1].unsqueeze(-1)).squeeze(-1)
         )
 
         # save the scalar to be used later when inverse translating the data for plotting.
