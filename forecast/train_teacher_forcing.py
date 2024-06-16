@@ -2,7 +2,7 @@ from model import Transformer
 from torch.utils.data import DataLoader
 import torch
 import torch.nn as nn
-from DataLoader import SensorDataset
+from DataLoader import WeatherDataset
 import logging
 import time  # debugging
 from plot import *
@@ -50,8 +50,7 @@ def transformer(
             index_in,
             index_tar,
             _input,
-            target,
-            sensor_number,
+            target
         ) in dataloader:  # for each data set
 
             optimizer.zero_grad()
@@ -100,7 +99,6 @@ def transformer(
                 path_to_save_predictions,
                 src_humidity,
                 prediction_humidity,
-                sensor_number,
                 index_in,
                 index_tar,
             )
