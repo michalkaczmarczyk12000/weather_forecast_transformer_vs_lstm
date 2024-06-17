@@ -16,7 +16,7 @@ def main(
     batch_size: int = 1,
     frequency: int = 100,
     training_length=48,
-    forecast_window=24,
+    forecast_window=12,
     train_csv="weather_train.csv",
     test_csv="weather_test.csv",
     path_to_save_model="save_model/",
