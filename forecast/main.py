@@ -1,5 +1,6 @@
 import argparse
 from train_teacher_forcing import *
+
 # from train_with_sampling import *
 from DataLoader import *
 from torch.utils.data import DataLoader
@@ -15,7 +16,7 @@ def main(
     batch_size: int = 1,
     frequency: int = 100,
     training_length=48,
-    forecast_window=24,
+    forecast_window=6,
     train_csv="weather_train.csv",
     test_csv="weather_test.csv",
     path_to_save_model="save_model/",
@@ -63,7 +64,7 @@ def main(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--epoch", type=int, default=1000)
+    parser.add_argument("--epoch", type=int, default=100)
     parser.add_argument("--k", type=int, default=60)
     parser.add_argument("--batch_size", type=int, default=1)
     parser.add_argument("--frequency", type=int, default=100)
