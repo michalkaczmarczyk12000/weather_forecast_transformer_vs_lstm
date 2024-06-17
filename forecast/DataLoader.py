@@ -29,8 +29,8 @@ class WeatherDataset(Dataset):
         self.S = forecast_window
 
     def __len__(self):
-            # return the number of unique timestamps divided by the training length plus forecast window
-            return len(self.df) // (self.T + self.S)
+        # return the number of unique timestamps divided by the training length plus forecast window
+        return len(self.df) // (self.T + self.S)
 
     # Will pull an index between 0 and __len__.
     def __getitem__(self, idx):
@@ -40,13 +40,15 @@ class WeatherDataset(Dataset):
         # np.random.seed(0)
 
         index_in = torch.tensor([i for i in range(start, start + self.T)])
-        index_tar = torch.tensor([i for i in range(start + self.T, start + self.T + self.S)])
+        index_tar = torch.tensor(
+            [i for i in range(start + self.T, start + self.T + self.S)]
+        )
 
         _input = torch.tensor(
             self.df[
                 [
-		            "Humidity",
                     "Temperature (C)",
+                    "Humidity",
                     "sin_hour",
                     "cos_hour",
                     "sin_day",
@@ -59,8 +61,8 @@ class WeatherDataset(Dataset):
         target = torch.tensor(
             self.df[
                 [
-                    "Humidity",
                     "Temperature (C)",
+                    "Humidity",
                     "sin_hour",
                     "cos_hour",
                     "sin_day",
