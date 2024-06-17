@@ -15,7 +15,7 @@ def main(
     batch_size: int = 1,
     frequency: int = 100,
     training_length=48,
-    forecast_window=8,
+    forecast_window=6,
     train_csv="weather_train.csv",
     test_csv="weather_test.csv",
     path_to_save_model="save_model/",
@@ -67,6 +67,7 @@ if __name__ == "__main__":
     parser.add_argument("--k", type=int, default=60)
     parser.add_argument("--batch_size", type=int, default=1)
     parser.add_argument("--frequency", type=int, default=100)
+    parser.add_argument("--forecast_window", type=int, default=24)
     parser.add_argument("--path_to_save_model", type=str, default="save_model/")
     parser.add_argument("--path_to_save_loss", type=str, default="save_loss/")
     parser.add_argument(
@@ -80,6 +81,7 @@ if __name__ == "__main__":
         k=args.k,
         batch_size=args.batch_size,
         frequency=args.frequency,
+        forecast_window=args.forecast_window,
         path_to_save_model=args.path_to_save_model,
         path_to_save_loss=args.path_to_save_loss,
         path_to_save_predictions=args.path_to_save_predictions,
