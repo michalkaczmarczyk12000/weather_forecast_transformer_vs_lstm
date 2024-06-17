@@ -4,15 +4,15 @@ import numpy as np
 import datetime
 from icecream import ic
 
+
 # encoding the timestamp data cyclically. See Medium Article.
 def process_data(source):
-
     df = pd.read_csv(source)
         
-    timestamps = [ts.split('.')[0] for ts in  df['Formatted Date']]
-    timestamps_hour = np.array([float(datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S').hour) for t in timestamps])
-    timestamps_day = np.array([float(datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S').day) for t in timestamps])
-    timestamps_month = np.array([float(datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S').month) for t in timestamps])
+    timestamps = df['Date Time']
+    timestamps_hour = np.array([float(datetime.datetime.strptime(t, '%d.%m.%Y %H:%M:%S').hour) for t in timestamps])
+    timestamps_day = np.array([float(datetime.datetime.strptime(t, '%d.%m.%Y %H:%M:%S').day) for t in timestamps])
+    timestamps_month = np.array([float(datetime.datetime.strptime(t, '%d.%m.%Y %H:%M:%S').month) for t in timestamps])
 
     hours_in_day = 24
     days_in_month = 30
@@ -27,8 +27,9 @@ def process_data(source):
 
     return df
 
-train_dataset = process_data('Data/weather_train_raw.csv')
-test_dataset = process_data('Data/weather_test_raw.csv')
 
-train_dataset.to_csv(r'Data/weather_train.csv', index=False)
-test_dataset.to_csv(r'Data/weather_test.csv', index=False)
+train_dataset = process_data("Data/jena_train_raw.csv")
+test_dataset = process_data("Data/jena_test_raw.csv")
+
+train_dataset.to_csv(r"Data/jweather_train.csv", index=False)
+test_dataset.to_csv(r"Data/jweather_test.csv", index=False)

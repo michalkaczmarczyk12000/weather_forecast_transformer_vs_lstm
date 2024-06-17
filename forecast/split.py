@@ -1,16 +1,18 @@
+# Load data from CSV file
 import pandas as pd
-from sklearn.model_selection import train_test_split
+file_path = 'Data/lst_dataset.csv'
+data = pd.read_csv(file_path)
 
-# Wczytaj dane z pliku CSV
-file_path = 'Data\weatherHistory.csv'
-df = pd.read_csv(file_path)
-df.sort_values(by='Formatted Date', inplace = True)
+# Select full-hour records starting from the 7th record
+full_hour_data = data.iloc[5::6, :]
+full_hour_data = full_hour_data.head(10000)
+# Calculate the split index for 80:20 proportion
+split_index = int(0.8 * len(full_hour_data))
 
-# Załóżmy, że mamy DataFrame df
-train_size = int(0.8 * len(df))  # 80% na trening
-train_data = df[:train_size]
-test_data = df[train_size:]
+# Split the data into training and test sets
+train_data = full_hour_data[:split_index]
+test_data = full_hour_data[split_index:]
 
-# Zapisz wyniki do plików CSV
-train_data.to_csv('Data/weather_train_raw.csv', index=False)
-test_data.to_csv('Data/weather_test_raw.csv', index=False)
+# Save the results to CSV files
+train_data.to_csv('Data/jena_train_raw.csv', index=False)
+test_data.to_csv('Data/jena_test_raw.csv', index=False)
