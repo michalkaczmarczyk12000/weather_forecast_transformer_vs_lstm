@@ -49,7 +49,7 @@ def plot_prediction(title, path_to_save, src, tgt, prediction, index_in, index_t
     plt.minorticks_on()
     plt.grid(visible=True, which="minor", linestyle="dashed", alpha=0.5)
     plt.xlabel("Time Elapsed")
-    plt.ylabel("Temperature")
+    plt.ylabel("Humidity")
     plt.legend()
     plt.title("Forecast")
 
@@ -85,7 +85,7 @@ def plot_training(epoch, path_to_save, src, prediction, index_in, index_tar):
 
     plt.title("Teaching Forcing  " + " Epoch " + str(epoch))
     plt.xlabel("Time Elapsed")
-    plt.ylabel("Temperature")
+    plt.ylabel("Humidity")
     plt.legend()
     plt.savefig(path_to_save + f"/Epoch_{str(epoch)}.png")
     plt.close()
@@ -136,7 +136,7 @@ def plot_training_3(
     )
     plt.title("Teaching Forcing" + " Epoch " + str(epoch))
     plt.xlabel("Time Elapsed")
-    plt.ylabel("Temperature")
+    plt.ylabel("Humidity")
     plt.legend()
     plt.savefig(path_to_save + f"/Epoch_{str(epoch)}.png")
     plt.close()
