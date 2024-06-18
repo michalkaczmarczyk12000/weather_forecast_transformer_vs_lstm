@@ -67,7 +67,7 @@ if __name__ == "__main__":
     parser.add_argument("--k", type=int, default=60)
     parser.add_argument("--batch_size", type=int, default=1)
     parser.add_argument("--frequency", type=int, default=100)
-    parser.add_argument("--forecast_window", type=int, default=6)
+    parser.add_argument("--forecast_window", type=int, default=8)
     parser.add_argument("--path_to_save_model", type=str, default="save_model/")
     parser.add_argument("--path_to_save_loss", type=str, default="save_loss/")
     parser.add_argument(
