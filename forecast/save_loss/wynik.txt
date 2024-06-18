@@ -1,1 +1,1 @@
-[2024-06-18 09:32:51] [INFO] inference Loss On Unseen Dataset: 0.12419082861570112
+[2024-06-18 10:22:41] [INFO] inference Loss On Unseen Dataset: 0.1806089201625154
