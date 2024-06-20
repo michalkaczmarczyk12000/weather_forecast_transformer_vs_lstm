@@ -7,7 +7,6 @@ import pandas as pd
 from tensorflow.keras.models import load_model
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
-# Definicje metryk
 def calculate_mae(true_future, predicted_future):
     return mean_absolute_error(true_future, predicted_future)
 
