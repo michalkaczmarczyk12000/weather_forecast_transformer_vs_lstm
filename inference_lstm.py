@@ -17,20 +17,6 @@ def calculate_rmse(true_future, predicted_future):
 def inverse_standardize(scaled_data, mean, std):
     return (scaled_data * std) + mean
 
-# def multi_step_plot(history, true_future, prediction):
-#   plt.figure(figsize=(12, 6))
-#   num_in = create_time_steps(len(history))
-#   num_out = len(true_future)
-
-#   plt.plot(num_in, np.array(history[:, 0]), label='History')
-#   plt.plot(np.arange(num_out)/STEP, np.array(true_future), 'bo',
-#            label='True Future')
-#   if prediction.any():
-#     plt.plot(np.arange(num_out)/STEP, np.array(prediction), 'ro',
-#              label='Predicted Future')
-#   plt.legend(loc='upper left')
-#   plt.show()
-
 def multi_step_plot(history, true_future, prediction, num_points=6):
     plt.figure(figsize=(12, 6))
     num_in = create_time_steps(len(history))
@@ -107,10 +93,6 @@ else:
   print("Provide valid dataset")
 
 
-# dataset = features.values
-# data_mean = dataset[:TRAIN_SPLIT].mean(axis=0)
-# data_std = dataset[:TRAIN_SPLIT].std(axis=0)
-
 dataset = features.values
 data_mean = dataset[:TRAIN_SPLIT].mean(axis=0)
 data_std = dataset[:TRAIN_SPLIT].std(axis=0)
@@ -130,8 +112,6 @@ BUFFER_SIZE = 10000
 val_data_multi = tf.data.Dataset.from_tensor_slices((x_val_multi, y_val_multi))
 val_data_multi = val_data_multi.batch(BATCH_SIZE).repeat()
 
-# Ładowanie modelu
-#model_path = 'Models\lstm_temp_6hrs_jena.keras'
 model = load_model(model_path)
 
 all_true_futures = []
@@ -144,18 +124,15 @@ for x, y in val_data_multi.take(len(x_val_multi) // BATCH_SIZE//10):
         true_future = y[i]
         predicted_future = predictions[i]
 
-        # Odwrócenie standaryzacji
         true_future_real = inverse_standardize(true_future, data_mean[desired_target], data_std[desired_target])
         predicted_future_real = inverse_standardize(predicted_future, data_mean[desired_target], data_std[desired_target])
 
         all_true_futures.append(true_future_real)
         all_predicted_futures.append(predicted_future_real)
 
-# Konwersja do tablic numpy
 all_true_futures = np.concatenate(all_true_futures, axis=0)
 all_predicted_futures = np.concatenate(all_predicted_futures, axis=0)
 
-# Obliczanie zbiorczych metryk
 
 overall_mae = calculate_mae(all_true_futures, all_predicted_futures)
 overall_rmse = calculate_rmse(all_true_futures, all_predicted_futures)
