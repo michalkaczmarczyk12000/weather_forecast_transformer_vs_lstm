@@ -11,7 +11,6 @@ from icecream import ic
 
 
 class WeatherDataset(Dataset):
-    """Face Landmarks dataset."""
 
     def __init__(self, csv_name, root_dir, training_length, forecast_window):
         """
@@ -20,7 +19,6 @@ class WeatherDataset(Dataset):
             root_dir (string): Directory
         """
 
-        # load raw data file
         csv_file = os.path.join(root_dir, csv_name)
         self.df = pd.read_csv(csv_file)
         self.root_dir = root_dir
@@ -29,15 +27,11 @@ class WeatherDataset(Dataset):
         self.S = forecast_window
 
     def __len__(self):
-        # return the number of unique timestamps divided by the training length plus forecast window
         return len(self.df) // (self.T + self.S)
 
-    # Will pull an index between 0 and __len__.
     def __getitem__(self, idx):
 
         start = np.random.randint(0, len(self.df) - self.T - self.S)
-
-        # np.random.seed(0)
 
         index_in = torch.tensor([i for i in range(start, start + self.T)])
         index_tar = torch.tensor(
@@ -73,9 +67,6 @@ class WeatherDataset(Dataset):
             ][start + self.T : start + self.T + self.S].values
         )
 
-        # scalar is fit only to the input, to avoid the scaled values "leaking" information about the target range.
-        # scalar is fit only for humidity, as the timestamps are already scaled
-        # scalar input/output of shape: [n_samples, n_features].
         scaler = self.transform
 
         scaler.fit(_input[:, 0].unsqueeze(-1))
@@ -86,7 +77,6 @@ class WeatherDataset(Dataset):
             scaler.transform(target[:, 0].unsqueeze(-1)).squeeze(-1)
         )
 
-        # save the scalar to be used later when inverse translating the data for plotting.
         dump(scaler, "scalar_item.joblib")
 
         return index_in, index_tar, _input, target

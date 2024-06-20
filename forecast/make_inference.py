@@ -15,14 +15,16 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 def calculate_metrics(predictions, targets):
     predictions = np.concatenate(predictions, axis=0)
     targets = np.concatenate(targets, axis=0)
-    
+
     mae = mean_absolute_error(targets, predictions)
     rmse = np.sqrt(mean_squared_error(targets, predictions))
-    
+
     return mae, rmse
+
 
 def inference_and_metrics(
     path_to_model,
@@ -32,7 +34,7 @@ def inference_and_metrics(
     scaler_path="scalar_item.joblib",
 ):
     device = torch.device(device)
-    
+
     model = Transformer().double().to(device)
     model.load_state_dict(torch.load(f"{path_to_model}/{model_name}"))
     model.eval()
@@ -59,21 +61,17 @@ def inference_and_metrics(
                         (predictions, prediction[-1, :, :].unsqueeze(0))
                     )
 
-                pos_encoding_old_vals = src[i + 1:, :, 1:]
+                pos_encoding_old_vals = src[i + 1 :, :, 1:]
                 pos_encoding_new_val = target[i + 1, :, 1:].unsqueeze(1)
-                pos_encodings = torch.cat(
-                    (pos_encoding_old_vals, pos_encoding_new_val)
-                )
+                pos_encodings = torch.cat((pos_encoding_old_vals, pos_encoding_new_val))
 
                 next_input_model = torch.cat(
                     (
-                        src[i + 1:, :, 0].unsqueeze(-1),
+                        src[i + 1 :, :, 0].unsqueeze(-1),
                         prediction[-1, :, :].unsqueeze(0),
                     )
                 )
-                next_input_model = torch.cat(
-                    (next_input_model, pos_encodings), dim=2
-                )
+                next_input_model = torch.cat((next_input_model, pos_encodings), dim=2)
 
             true_values = torch.cat((src[1:, :, 0], target[:-1, :, 0]))
             all_targets.append(true_values.cpu().numpy())
@@ -82,8 +80,9 @@ def inference_and_metrics(
     mae, rmse = calculate_metrics(all_predictions, all_targets)
     logger.info(f"MAE: {mae:.4f}")
     logger.info(f"RMSE: {rmse:.4f}")
-    
+
     return mae, rmse
+
 
 def main(
     test_csv,
@@ -106,6 +105,7 @@ def main(
     )
     print(f"MAE: {mae:.4f}")
     print(f"RMSE: {rmse:.4f}")
+
 
 if __name__ == "__main__":
     test_csv = "jweather_test.csv"

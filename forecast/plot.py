@@ -28,23 +28,17 @@ def plot_prediction(title, path_to_save, src, tgt, prediction, index_in, index_t
 
     idx_scr = index_in[0, 1:].tolist()
     idx_tgt = index_tar[0].tolist()
-    idx_pred = [i for i in range(idx_scr[0] + 1, idx_tgt[-1])]  # t2 - t61
+    idx_pred = [i for i in range(idx_scr[0] + 1, idx_tgt[-1])]
 
     plt.figure(figsize=(15, 6))
     plt.rcParams.update({"font.size": 16})
 
-    # connect with last elemenet in src
-    # tgt = np.append(src[-1], tgt.flatten())
-    # prediction = np.append(src[-1], prediction.flatten())
-
-    # plotting
     plt.plot(idx_scr, src, "-", color="blue", label="Input", linewidth=2)
     plt.plot(idx_tgt, tgt, "-", color="indigo", label="Target", linewidth=2)
     plt.plot(
         idx_pred, prediction, "--", color="limegreen", label="Forecast", linewidth=2
     )
 
-    # formatting
     plt.grid(visible=True, which="major", linestyle="solid")
     plt.minorticks_on()
     plt.grid(visible=True, which="minor", linestyle="dashed", alpha=0.5)
@@ -53,16 +47,11 @@ def plot_prediction(title, path_to_save, src, tgt, prediction, index_in, index_t
     plt.legend()
     plt.title("Forecast")
 
-    # save
     plt.savefig(path_to_save + f"Prediction_{title}.png")
     plt.close()
 
 
 def plot_training(epoch, path_to_save, src, prediction, index_in, index_tar):
-
-    # idx_scr = index_in.tolist()[0]
-    # idx_tar = index_tar.tolist()[0]
-    # idx_pred = idx_scr.append(idx_tar.append([idx_tar[-1] + 1]))
 
     idx_scr = [i for i in range(len(src))]
     idx_pred = [i for i in range(1, len(prediction) + 1)]
@@ -101,10 +90,6 @@ def plot_training_3(
     index_tar,
 ):
 
-    # idx_scr = index_in.tolist()[0]
-    # idx_tar = index_tar.tolist()[0]
-    # idx_pred = idx_scr.append(idx_tar.append([idx_tar[-1] + 1]))
-
     idx_scr = [i for i in range(len(src))]
     idx_pred = [i for i in range(1, len(prediction) + 1)]
     idx_sampled_src = [i for i in range(len(sampled_src))]
@@ -115,7 +100,6 @@ def plot_training_3(
     plt.grid(visible=True, which="minor", linestyle="--", alpha=0.5)
     plt.minorticks_on()
 
-    ## REMOVE DROPOUT FOR THIS PLOT TO APPEAR AS EXPECTED !! DROPOUT INTERFERES WITH HOW THE SAMPLED SOURCES ARE PLOTTED
     plt.plot(
         idx_sampled_src,
         sampled_src,

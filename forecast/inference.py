@@ -41,45 +41,38 @@ def inference(
 
             for index_in, index_tar, _input, target in dataloader:
 
-                # starting from 1 so that src matches with target, but has same length as when training
-                src = (
-                    _input.permute(1, 0, 2).double().to(device)[1:, :, :]
-                )  # 47, 1, 7: t1 -- t47
-                target = target.permute(1, 0, 2).double().to(device)  # t48 - t59
+                src = _input.permute(1, 0, 2).double().to(device)[1:, :, :]
+                target = target.permute(1, 0, 2).double().to(device)
 
                 next_input_model = src
                 all_predictions = []
 
                 for i in range(forecast_window - 1):
 
-                    prediction = model(next_input_model)  # 47,1,1: t2' - t48'
+                    prediction = model(next_input_model)
 
                     if all_predictions == []:
-                        all_predictions = prediction  # 47,1,1: t2' - t48'
+                        all_predictions = prediction
                     else:
                         all_predictions = torch.cat(
                             (all_predictions, prediction[-1, :, :].unsqueeze(0))
-                        )  # 47+,1,1: t2' - t48', t49', t50'
+                        )
 
-                    pos_encoding_old_vals = src[
-                        i + 1 :, :, 1:
-                    ]  # 46, 1, 6, pop positional encoding first value: t2 -- t47
-                    pos_encoding_new_val = target[i + 1, :, 1:].unsqueeze(
-                        1
-                    )  # 1, 1, 6, append positional encoding of last predicted value: t48
+                    pos_encoding_old_vals = src[i + 1 :, :, 1:]
+                    pos_encoding_new_val = target[i + 1, :, 1:].unsqueeze(1)
                     pos_encodings = torch.cat(
                         (pos_encoding_old_vals, pos_encoding_new_val)
-                    )  # 47, 1, 6 positional encodings matched with prediction: t2 -- t48
+                    )
 
                     next_input_model = torch.cat(
                         (
                             src[i + 1 :, :, 0].unsqueeze(-1),
                             prediction[-1, :, :].unsqueeze(0),
                         )
-                    )  # t2 -- t47, t48'
+                    )
                     next_input_model = torch.cat(
                         (next_input_model, pos_encodings), dim=2
-                    )  # 47, 1, 7 input for next round
+                    )
 
                 true = torch.cat((src[1:, :, 0], target[:-1, :, 0]))
                 loss = criterion(true, all_predictions[:, :, 0])
